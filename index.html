@@ -6,33 +6,82 @@
     <title>Adicionar Registro</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .message {
+            margin-top: 20px;
+            text-align: center;
+            color: #28a745;
+        }
+    </style>
 </head>
 <body>
     <h1>Adicionar Registro</h1>
     <form id="registroForm">
         <label for="name">Nome:</label>
-        <input type="text" id="name" required><br><br>
-        
+        <input type="text" id="name" required>
+
         <label for="date">Data:</label>
-        <input type="date" id="date" required><br><br>
-        
+        <input type="date" id="date" required>
+
         <label for="photo">URL da Foto:</label>
-        <input type="text" id="photo" required><br><br>
-        
+        <input type="text" id="photo" required>
+
         <button type="submit">Adicionar Registro</button>
     </form>
+    <div class="message" id="message"></div>
 
     <script>
         // Configuração do Firebase
         const firebaseConfig = {
-  apiKey: "AIzaSyDGi1Lj-C4xpKsqRWrO0frhBFRnp94PUAo",
-  authDomain: "crud-git-3a5da.firebaseapp.com",
-  projectId: "crud-git-3a5da",
-  storageBucket: "crud-git-3a5da.firebasestorage.app",
-  messagingSenderId: "1086071130934",
-  appId: "1:1086071130934:web:b8bac0a7e63536d5798197",
-  measurementId: "G-8460PFEZ0V"
-};
+            apiKey: "SUA_API_KEY",
+            authDomain: "SEU_PROJETO.firebaseapp.com",
+            projectId: "SEU_PROJETO",
+            storageBucket: "SEU_PROJETO.appspot.com",
+            messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+            appId: "SEU_APP_ID"
+        };
 
         // Inicializa o Firebase
         const app = firebase.initializeApp(firebaseConfig);
@@ -47,10 +96,11 @@
                     photo: photo
                 });
                 console.log("Documento adicionado com ID: ", docRef.id);
-                alert("Registro adicionado com sucesso!");
+                document.getElementById("message").innerText = "Registro adicionado com sucesso!";
+                document.getElementById("registroForm").reset(); // Limpa o formulário
             } catch (error) {
                 console.error("Erro ao adicionar documento: ", error);
-                alert("Erro ao adicionar registro.");
+                document.getElementById("message").innerText = "Erro ao adicionar registro.";
             }
         }
 
