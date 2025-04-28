@@ -8,309 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #4F46E5;
-            --primary-dark: #4338CA;
-            --primary-light: #818CF8;
-            --secondary: #10B981;
-            --secondary-dark: #059669;
-            --danger: #EF4444;
-            --warning: #F59E0B;
-            --info: #3B82F6;
-            --success: #10B981;
-            --bg-light: #F9FAFB;
-            --bg-dark: #1F2937;
-            --text-light: #9CA3AF;
-            --text-dark: #1F2937;
-            --border-light: #E5E7EB;
-            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-
-        .card {
-            background: white;
-            border-radius: 0.75rem;
-            box-shadow: var(--card-shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            overflow: hidden;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-light);
-            border-radius: 0.5rem;
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-            outline: none;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .btn-success {
-            background-color: var(--success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background-color: var(--secondary-dark);
-        }
-
-        .btn-danger {
-            background-color: var(--danger);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background-color: #DC2626;
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--border-light);
-        }
-
-        .btn-outline:hover {
-            background-color: #F3F4F6;
-        }
-
-        .tab-button {
-            padding: 0.75rem 1.5rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-            background: none;
-            color: var(--text-light);
-        }
-
-        .tab-button.active {
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .drop-zone {
-            border: 2px dashed var(--border-light);
-            border-radius: 0.5rem;
-            padding: 2rem;
-            text-align: center;
-            transition: border-color 0.3s ease;
-            cursor: pointer;
-        }
-
-        .drop-zone:hover {
-            border-color: var(--primary-light);
-        }
-
-        .drop-zone.active {
-            border-color: var(--primary);
-            background-color: rgba(79, 70, 229, 0.05);
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-
-        .table th {
-            text-align: left;
-            padding: 1rem;
-            background-color: #F9FAFB;
-            font-weight: 500;
-            color: var(--text-dark);
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        .table td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-light);
-            vertical-align: middle;
-        }
-
-        .table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .badge {
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .preview-image {
-            max-width: 150px;
-            max-height: 150px;
-            object-fit: cover;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .toast {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            color: white;
-            margin-bottom: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            transform: translateX(150%);
-            transition: transform 0.3s ease-in-out;
-            z-index: 9999;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .toast-success {
-            background-color: var(--success);
-        }
-
-        .toast-danger {
-            background-color: var(--danger);
-        }
-
-        .toast-info {
-            background-color: var(--info);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 0.75rem;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: var(--card-shadow);
-        }
-
-        .search-container {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-
-        .search-container i {
-            position: absolute;
-            left: 1rem;
-            top: 1rem;
-            color: var(--text-light);
-        }
-
-        .search-input {
-            padding-left: 2.5rem;
-        }
-
-        /* Animações */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        .slide-in {
-            animation: slideIn 0.3s ease-in-out;
-        }
-
-        /* Responsivo */
-        @media (max-width: 768px) {
-            .table-container {
-                overflow-x: auto;
-            }
-            
-            .card {
-                padding: 1rem;
-            }
-            
-            .form-container, .table-container {
-                padding: 1rem;
-            }
-            
-            .btn {
-                padding: 0.5rem 1rem;
-            }
-        }
+        /* Seu estilo CSS aqui */
     </style>
 </head>
 <body class="bg-gray-50">
@@ -335,40 +33,6 @@
                             <input type="text" id="name" class="form-control" placeholder="Digite o nome" required>
                         </div>
                         
-                        <!-- Tabs para tipo de imagem -->
-                        <div class="form-group">
-                            <label class="block mb-2 font-medium">Foto</label>
-                            <div class="border-b mb-4">
-                                <button type="button" class="tab-button active" data-tab="upload">Upload de Arquivo</button>
-                                <button type="button" class="tab-button" data-tab="url">URL da Imagem</button>
-                            </div>
-                            
-                            <!-- Tab de Upload -->
-                            <div id="upload-tab" class="tab-content active">
-                                <div class="drop-zone" id="dropZone">
-                                    <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
-                                    <p>Arraste e solte um arquivo de imagem ou</p>
-                                    <input type="file" id="fileInput" accept="image/*" class="hidden">
-                                    <button type="button" id="browseButton" class="btn btn-outline mt-3">
-                                        <i class="fas fa-image mr-2"></i> Escolher Arquivo
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <!-- Tab de URL -->
-                            <div id="url-tab" class="tab-content">
-                                <input type="text" id="imageUrl" class="form-control" placeholder="Cole a URL da imagem">
-                            </div>
-                            
-                            <!-- Preview da imagem -->
-                            <div id="imagePreviewContainer" class="mt-4 text-center hidden">
-                                <img id="imagePreview" class="preview-image mx-auto">
-                                <button type="button" id="removeImage" class="btn btn-outline mt-2">
-                                    <i class="fas fa-trash-alt mr-2"></i> Remover
-                                </button>
-                            </div>
-                        </div>
-                        
                         <div class="form-group">
                             <label for="date" class="block mb-2 font-medium">Data</label>
                             <input type="date" id="date" class="form-control" required>
@@ -391,18 +55,12 @@
                 <div class="card p-6">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Lista de Cadastros</h2>
-                        
-                        <div class="search-container">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="searchInput" class="form-control search-input" placeholder="Buscar por nome...">
-                        </div>
                     </div>
                     
                     <div class="table-container overflow-x-auto">
                         <table class="table w-full">
                             <thead>
                                 <tr>
-                                    <th>Foto</th>
                                     <th>Nome</th>
                                     <th>Data</th>
                                     <th>Ações</th>
@@ -417,430 +75,88 @@
                     <div id="emptyState" class="text-center py-10">
                         <i class="fas fa-folder-open text-gray-300 text-5xl mb-4"></i>
                         <p class="text-gray-500">Nenhum registro cadastrado.</p>
-                        <p class="text-gray-400 text-sm mt-2">Adicione um novo registro usando o formulário.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Modal de confirmação -->
-    <div id="confirmModal" class="modal">
-        <div class="modal-content slide-in">
-            <h3 class="text-xl font-semibold mb-4">Confirmar exclusão</h3>
-            <p class="mb-6">Tem certeza que deseja excluir este registro? Esta ação não pode ser desfeita.</p>
-            <div class="flex justify-end space-x-3">
-                <button id="cancelDelete" class="btn btn-outline">Cancelar</button>
-                <button id="confirmDelete" class="btn btn-danger">
-                    <i class="fas fa-trash-alt mr-2"></i> Excluir
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Sistema de notificações Toast -->
-    <div id="toastContainer"></div>
-    
-    <script>
-        // Estado da aplicação
-        let records = JSON.parse(localStorage.getItem('records')) || [];
-        let isEditing = false;
-        let currentImageData = null;
-        let currentDeleteId = null;
-        
-        // Elementos DOM
-        const recordForm = document.getElementById('recordForm');
-        const editId = document.getElementById('editId');
-        const nameInput = document.getElementById('name');
-        const dateInput = document.getElementById('date');
-        const fileInput = document.getElementById('fileInput');
-        const imageUrl = document.getElementById('imageUrl');
-        const dropZone = document.getElementById('dropZone');
-        const browseButton = document.getElementById('browseButton');
-        const imagePreview = document.getElementById('imagePreview');
-        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-        const removeImage = document.getElementById('removeImage');
-        const recordsList = document.getElementById('recordsList');
-        const emptyState = document.getElementById('emptyState');
-        const submitBtn = document.getElementById('submitBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const formTitle = document.getElementById('form-title');
-        const confirmModal = document.getElementById('confirmModal');
-        const confirmDelete = document.getElementById('confirmDelete');
-        const cancelDelete = document.getElementById('cancelDelete');
-        const searchInput = document.getElementById('searchInput');
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        // Inicialização
-        function init() {
-            renderRecords();
-            setupTabSystem();
-            setupEventListeners();
-            setDefaultDate();
-        }
-        
-        // Define a data atual como padrão
-        function setDefaultDate() {
-            const today = new Date().toISOString().split('T')[0];
-            dateInput.value = today;
-        }
-        
-        // Configuração do sistema de abas
-        function setupTabSystem() {
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const tabId = button.getAttribute('data-tab');
-                    
-                    // Ativar/desativar botões de abas
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    
-                    // Mostrar/ocultar conteúdo das abas
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    document.getElementById(`${tabId}-tab`).classList.add('active');
-                    
-                    // Limpar campos da outra aba
-                    if (tabId === 'upload') {
-                        imageUrl.value = '';
-                    } else {
-                        currentImageData = null;
-                    }
+    <!-- Adicione o SDK do Firebase -->
+    <script type="module">
+        // Importar as funções necessárias do SDK do Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGi1Lj-C4xpKsqRWrO0frhBFRnp94PUAo",
+            authDomain: "crud-git-3a5da.firebaseapp.com",
+            projectId: "crud-git-3a5da",
+            storageBucket: "crud-git-3a5da.firebasestorage.app",
+            messagingSenderId: "1086071130934",
+            appId: "1:1086071130934:web:7635ddb6dfa138a6798197",
+            measurementId: "G-9MQNX0E37V"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Função para adicionar um registro ao Firestore
+        async function addRecordToFirestore(name, date) {
+            try {
+                await addDoc(collection(db, "registros"), {
+                    name: name,
+                    date: date
                 });
+                console.log("Registro adicionado com sucesso!");
+                renderRecords(); // Atualize a lista de registros
+            } catch (error) {
+                console.error("Erro ao adicionar registro: ", error);
+            }
+        }
+
+        // Função para renderizar registros do Firestore
+        async function renderRecords() {
+            const querySnapshot = await getDocs(collection(db, "registros"));
+            const recordsList = document.getElementById('recordsList');
+            recordsList.innerHTML = ""; // Limpa a lista antes de renderizar
+            querySnapshot.forEach((doc) => {
+                const record = doc.data();
+                recordsList.innerHTML += `
+                    <tr class="hover:bg-gray-50 transition-colors fade-in">
+                        <td class="font-medium">${record.name}</td>
+                        <td>${record.date}</td>
+                        <td>
+                            <div class="flex space-x-2">
+                                <button onclick="editRecord('${doc.id}')" class="btn btn-outline p-2">
+                                    <i class="fas fa-edit text-indigo-600"></i>
+                                </button>
+                                <button onclick="confirmDeleteRecord('${doc.id}')" class="btn btn-outline p-2">
+                                    <i class="fas fa-trash-alt text-red-500"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
             });
         }
-        
+
         // Configuração de listeners de eventos
-        function setupEventListeners() {
-            // Form submission
-            recordForm.addEventListener('submit', handleFormSubmit);
-            
-            // Botão de reset
-            resetBtn.addEventListener('click', resetForm);
-            
-            // Upload de imagem - drag & drop
-            dropZone.addEventListener('dragover', e => {
-                e.preventDefault();
-                dropZone.classList.add('active');
-            });
-            
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.classList.remove('active');
-            });
-            
-            dropZone.addEventListener('drop', e => {
-                e.preventDefault();
-                dropZone.classList.remove('active');
-                
-                if (e.dataTransfer.files.length) {
-                    handleFileSelect(e.dataTransfer.files[0]);
-                }
-            });
-            
-            // Upload de imagem - clique
-            browseButton.addEventListener('click', () => {
-                fileInput.click();
-            });
-            
-            fileInput.addEventListener('change', e => {
-                if (e.target.files.length) {
-                    handleFileSelect(e.target.files[0]);
-                }
-            });
-            
-            // URL da imagem
-            imageUrl.addEventListener('input', previewImageFromUrl);
-            
-            // Remover imagem
-            removeImage.addEventListener('click', clearImagePreview);
-            
-            // Modal de exclusão
-            confirmDelete.addEventListener('click', () => {
-                deleteRecord(currentDeleteId);
-                closeModal();
-            });
-            
-            cancelDelete.addEventListener('click', closeModal);
-            
-            // Pesquisa
-            searchInput.addEventListener('input', filterRecords);
-        }
-        
-        // Manipular envio do formulário
-        function handleFormSubmit(e) {
+        document.getElementById('recordForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const name = nameInput.value.trim();
-            const date = dateInput.value;
-            
-            // Validar nome e data
-            if (!name || !date) {
-                showToast('Por favor, preencha todos os campos obrigatórios.', 'danger');
-                return;
-            }
-            
-            // Validar imagem (obrigatória apenas para novos registros)
-            const imageSource = currentImageData || imageUrl.value.trim();
-            if (!isEditing && !imageSource) {
-                showToast('Por favor, adicione uma imagem.', 'danger');
-                return;
-            }
-            
-            if (isEditing) {
-                // Atualizar registro existente
-                updateRecord(editId.value, name, imageSource || findRecordById(editId.value).image, date);
-                showToast('Registro atualizado com sucesso!', 'success');
+            const name = document.getElementById('name').value.trim();
+            const date = document.getElementById('date').value;
+            if (name && date) {
+                addRecordToFirestore(name, date);
+                document.getElementById('recordForm').reset();
             } else {
-                // Adicionar novo registro
-                addRecord(name, imageSource, date);
-                showToast('Registro adicionado com sucesso!', 'success');
+                alert("Por favor, preencha todos os campos.");
             }
-            
-            resetForm();
-        }
-        
-        // Adicionar novo registro
-        function addRecord(name, image, date) {
-            const newRecord = {
-                id: Date.now().toString(),
-                name,
-                image,
-                date
-            };
-            
-            records.push(newRecord);
-            saveRecords();
-            renderRecords();
-        }
-        
-        // Atualizar registro existente
-        function updateRecord(id, name, image, date) {
-            const index = records.findIndex(record => record.id === id);
-            
-            if (index !== -1) {
-                records[index] = {
-                    ...records[index],
-                    name,
-                    image,
-                    date
-                };
-                
-                saveRecords();
-                renderRecords();
-            }
-        }
-        
-        // Excluir registro
-        function deleteRecord(id) {
-            records = records.filter(record => record.id !== id);
-            saveRecords();
-            renderRecords();
-            showToast('Registro excluído com sucesso!', 'info');
-        }
-        
-        // Limpar formulário
-        function resetForm() {
-            recordForm.reset();
-            editId.value = '';
-            isEditing = false;
-            formTitle.textContent = 'Adicionar Registro';
-            submitBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Adicionar';
-            clearImagePreview();
-            setDefaultDate();
-            
-            // Resetar abas
-            tabButtons[0].click();
-        }
-        
-        // Processar arquivo selecionado
-        function handleFileSelect(file) {
-            if (!file.type.match('image.*')) {
-                showToast('Por favor, selecione um arquivo de imagem válido.', 'danger');
-                return;
-            }
-            
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                currentImageData = e.target.result;
-                imagePreview.src = currentImageData;
-                imagePreviewContainer.classList.remove('hidden');
-            };
-            
-            reader.readAsDataURL(file);
-        }
-        
-        // Visualizar imagem a partir da URL
-        function previewImageFromUrl() {
-            const url = imageUrl.value.trim();
-            
-            if (url) {
-                imagePreview.src = url;
-                imagePreviewContainer.classList.remove('hidden');
-                currentImageData = null;
-            } else {
-                clearImagePreview();
-            }
-        }
-        
-        // Limpar visualização da imagem
-        function clearImagePreview() {
-            imagePreview.src = '';
-            imagePreviewContainer.classList.add('hidden');
-            fileInput.value = '';
-            imageUrl.value = '';
-            currentImageData = null;
-        }
-        
-        // Editar registro
-        function editRecord(id) {
-            const record = findRecordById(id);
-            
-            if (record) {
-                editId.value = id;
-                nameInput.value = record.name;
-                dateInput.value = record.date;
-                
-                // Exibir imagem
-                imagePreview.src = record.image;
-                imagePreviewContainer.classList.remove('hidden');
-                
-                // Detectar se é URL ou base64
-                if (record.image.startsWith('data:')) {
-                    currentImageData = record.image;
-                    tabButtons[0].click(); // Aba de upload
-                } else {
-                    imageUrl.value = record.image;
-                    tabButtons[1].click(); // Aba de URL
-                }
-                
-                isEditing = true;
-                formTitle.textContent = 'Editar Registro';
-                submitBtn.innerHTML = '<i class="fas fa-edit mr-2"></i> Atualizar';
-                
-                // Rolar até o formulário em dispositivos móveis
-                if (window.innerWidth < 768) {
-                    recordForm.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        }
-        
-        // Confirmar exclusão
-        function confirmDeleteRecord(id) {
-            currentDeleteId = id;
-            confirmModal.style.display = 'flex';
-        }
-        
-        // Fechar modal
-        function closeModal() {
-            confirmModal.style.display = 'none';
-        }
-        
-        // Filtrar registros
-        function filterRecords() {
-            const query = searchInput.value.toLowerCase();
-            const filteredRecords = records.filter(record => 
-                record.name.toLowerCase().includes(query)
-            );
-            
-            renderRecordsList(filteredRecords);
-        }
-        
-        // Encontrar registro por ID
-        function findRecordById(id) {
-            return records.find(record => record.id === id);
-        }
-        
-        // Salvar registros no localStorage
-        function saveRecords() {
-            localStorage.setItem('records', JSON.stringify(records));
-        }
-        
-        // Renderizar lista de registros
-        function renderRecords() {
-            renderRecordsList(records);
-        }
-        
-        // Renderizar lista de registros com dados fornecidos
-        function renderRecordsList(recordsToRender) {
-            if (recordsToRender.length === 0) {
-                recordsList.innerHTML = '';
-                emptyState.style.display = 'block';
-                return;
-            }
-            
-            emptyState.style.display = 'none';
-            
-            recordsList.innerHTML = recordsToRender.map(record => `
-                <tr class="hover:bg-gray-50 transition-colors fade-in">
-                    <td>
-                        <img src="${record.image}" alt="${record.name}" class="avatar">
-                    </td>
-                    <td class="font-medium">${record.name}</td>
-                    <td>${formatDate(record.date)}</td>
-                    <td>
-                        <div class="flex space-x-2">
-                            <button onclick="editRecord('${record.id}')" class="btn btn-outline p-2">
-                                <i class="fas fa-edit text-indigo-600"></i>
-                            </button>
-                            <button onclick="confirmDeleteRecord('${record.id}')" class="btn btn-outline p-2">
-                                <i class="fas fa-trash-alt text-red-500"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-        }
-        
-        // Formatar data
-        function formatDate(dateString) {
-            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-            return new Date(dateString).toLocaleDateString('pt-BR', options);
-        }
-        
-        // Exibir notificação toast
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.innerHTML = `
-                <div class="flex items-center">
-                    <i class="fas ${getToastIcon(type)} mr-2"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            
-            document.getElementById('toastContainer').appendChild(toast);
-            
-            // Mostrar com animação
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 10);
-            
-            // Remover após 3 segundos
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
-            }, 3000);
-        }
-        
-        // Obter ícone para toast
-        function getToastIcon(type) {
-            switch (type) {
-                case 'success': return 'fa-check-circle';
-                case 'danger': return 'fa-exclamation-circle';
-                case 'info': return 'fa-info-circle';
-                default: return 'fa-info-circle';
-            }
-        }
-        
-        // Expor funções para uso global (necessário para os eventos inline)
-        window.editRecord = editRecord;
-        window.confirmDeleteRecord = confirmDeleteRecord;
-        
-        // Inicializar aplicação
-        document.addEventListener('DOMContentLoaded', init);
+        });
+
+        // Inicializar a renderização dos registros
+        renderRecords();
     </script>
 </body>
 </html>
