@@ -60,18 +60,14 @@
 </head>
 <body class="bg-gray-50">
     <div class="container mx-auto py-8">
-        <!-- Toast para mensagens -->
         <div id="toast" class="toast"></div>
 
-        <!-- Header -->
         <header class="mb-10 text-center">
             <h1 class="text-4xl font-bold mb-2 text-indigo-600">Sistema de Cadastro</h1>
             <p class="text-gray-500">Gerencie facilmente registros com nossa interface moderna</p>
         </header>
 
-        <!-- Sistema CRUD -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Formulário -->
             <div class="lg:col-span-1">
                 <div class="card p-6">
                     <h2 class="text-2xl font-semibold mb-6" id="form-title">Adicionar Registro</h2>
@@ -106,7 +102,6 @@
                 </div>
             </div>
             
-            <!-- Lista de Registros -->
             <div class="lg:col-span-2">
                 <div class="card p-6">
                     <div class="flex justify-between items-center mb-6">
@@ -138,14 +133,11 @@
         </div>
     </div>
     
-    <!-- Adicione o SDK do Firebase -->
     <script type="module">
-        // Importar as funções necessárias do SDK do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
-        // Configuração do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDGi1Lj-C4xpKsqRWrO0frhBFRnp94PUAo",
             authDomain: "crud-git-3a5da.firebaseapp.com",
@@ -156,12 +148,10 @@
             measurementId: "G-9MQNX0E37V"
         };
 
-        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        // Função para adicionar um registro ao Firestore
         async function addRecordToFirestore(name, date, photoURL) {
             try {
                 await addDoc(collection(db, "registros"), {
@@ -177,7 +167,6 @@
             }
         }
 
-        // Função para fazer upload da foto e retornar a URL
         async function uploadPhoto(file) {
             const storageRef = ref(storage, `photos/${file.name}`);
             await uploadBytes(storageRef, file);
@@ -185,7 +174,6 @@
             return downloadURL;
         }
 
-        // Função para renderizar registros do Firestore
         async function renderRecords() {
             const querySnapshot = await getDocs(collection(db, "registros"));
             const recordsList = document.getElementById('recordsList');
@@ -214,7 +202,6 @@
             });
         }
 
-        // Função para mostrar mensagens (toast)
         function showToast(message, type = "success") {
             const toast = document.getElementById('toast');
             toast.innerText = message;
@@ -225,7 +212,6 @@
             }, 3000);
         }
 
-        // Configuração de listeners de eventos
         document.getElementById('recordForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const name = document.getElementById('name').value.trim();
@@ -234,16 +220,20 @@
             const file = photoInput.files[0];
 
             if (name && date && file) {
-                const photoURL = await uploadPhoto(file);
-                await addRecordToFirestore(name, date, photoURL);
-                document.getElementById('recordForm').reset();
-                document.getElementById('imagePreview').style.display = "none"; // Ocultar preview
+                try {
+                    const photoURL = await uploadPhoto(file);
+                    await addRecordToFirestore(name, date, photoURL);
+                    document.getElementById('recordForm').reset();
+                    document.getElementById('imagePreview').style.display = "none"; // Ocultar preview
+                } catch (error) {
+                    console.error("Erro ao processar o registro: ", error);
+                    showToast("Erro ao processar o registro.", "danger");
+                }
             } else {
                 showToast("Por favor, preencha todos os campos.", "danger");
             }
         });
 
-        // Preview da imagem
         document.getElementById('photo').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
@@ -257,7 +247,6 @@
             }
         });
 
-        // Inicializar a renderização dos registros
         renderRecords();
     </script>
 </body>
