@@ -8,11 +8,55 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Seu estilo CSS aqui */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #4F46E5;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #4338CA;
+        }
+        .btn-outline {
+            border: 1px solid #4F46E5;
+            color: #4F46E5;
+        }
+        .btn-outline:hover {
+            background-color: #4F46E5;
+            color: white;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4F46E5;
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
     <div class="container mx-auto py-8">
+        <!-- Toast para mensagens -->
+        <div id="toast" class="toast"></div>
+
         <!-- Header -->
         <header class="mb-10 text-center">
             <h1 class="text-4xl font-bold mb-2 text-indigo-600">Sistema de Cadastro</h1>
@@ -28,14 +72,14 @@
                     <form id="recordForm">
                         <input type="hidden" id="editId">
                         
-                        <div class="form-group">
+                        <div class="form-group mb-4">
                             <label for="name" class="block mb-2 font-medium">Nome</label>
-                            <input type="text" id="name" class="form-control" placeholder="Digite o nome" required>
+                            <input type="text" id="name" class="form-control border rounded w-full p-2" placeholder="Digite o nome" required>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="form-group mb-4">
                             <label for="date" class="block mb-2 font-medium">Data</label>
-                            <input type="date" id="date" class="form-control" required>
+                            <input type="date" id="date" class="form-control border rounded w-full p-2" required>
                         </div>
                         
                         <div class="flex space-x-3">
@@ -58,12 +102,12 @@
                     </div>
                     
                     <div class="table-container overflow-x-auto">
-                        <table class="table w-full">
+                        <table class="table w-full border border-gray-300">
                             <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Data</th>
-                                    <th>Ações</th>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 p-2">Nome</th>
+                                    <th class="border border-gray-300 p-2">Data</th>
+                                    <th class="border border-gray-300 p-2">Ações</th>
                                 </tr>
                             </thead>
                             <tbody id="recordsList">
@@ -109,10 +153,11 @@
                     name: name,
                     date: date
                 });
-                console.log("Registro adicionado com sucesso!");
+                showToast("Registro adicionado com sucesso!");
                 renderRecords(); // Atualize a lista de registros
             } catch (error) {
                 console.error("Erro ao adicionar registro: ", error);
+                showToast("Erro ao adicionar registro.", "danger");
             }
         }
 
@@ -125,9 +170,9 @@
                 const record = doc.data();
                 recordsList.innerHTML += `
                     <tr class="hover:bg-gray-50 transition-colors fade-in">
-                        <td class="font-medium">${record.name}</td>
-                        <td>${record.date}</td>
-                        <td>
+                        <td class="border border-gray-300 p-2 font-medium">${record.name}</td>
+                        <td class="border border-gray-300 p-2">${record.date}</td>
+                        <td class="border border-gray-300 p-2">
                             <div class="flex space-x-2">
                                 <button onclick="editRecord('${doc.id}')" class="btn btn-outline p-2">
                                     <i class="fas fa-edit text-indigo-600"></i>
@@ -142,6 +187,17 @@
             });
         }
 
+        // Função para mostrar mensagens (toast)
+        function showToast(message, type = "success") {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.style.display = "block";
+            toast.style.backgroundColor = type === "success" ? "#4F46E5" : "#E53E3E"; // Cor do fundo
+            setTimeout(() => {
+                toast.style.display = "none";
+            }, 3000);
+        }
+
         // Configuração de listeners de eventos
         document.getElementById('recordForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -151,7 +207,7 @@
                 addRecordToFirestore(name, date);
                 document.getElementById('recordForm').reset();
             } else {
-                alert("Por favor, preencha todos os campos.");
+                showToast("Por favor, preencha todos os campos.", "danger");
             }
         });
 
