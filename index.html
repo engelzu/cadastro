@@ -234,6 +234,11 @@
             }
         });
 
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            document.getElementById('recordForm').reset(); // Limpa o formulário
+            document.getElementById('imagePreview').style.display = "none"; // Oculta o preview
+        });
+
         document.getElementById('photo').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
