@@ -50,6 +50,12 @@
             display: none;
             z-index: 1000;
         }
+        .image-preview {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -81,6 +87,12 @@
                             <label for="date" class="block mb-2 font-medium">Data</label>
                             <input type="date" id="date" class="form-control border rounded w-full p-2" required>
                         </div>
+
+                        <div class="form-group mb-4">
+                            <label for="photo" class="block mb-2 font-medium">Foto</label>
+                            <input type="file" id="photo" class="form-control border rounded w-full p-2" accept="image/*" required>
+                            <img id="imagePreview" class="image-preview" src="" alt="Preview da imagem" style="display: none;">
+                        </div>
                         
                         <div class="flex space-x-3">
                             <button type="submit" id="submitBtn" class="btn btn-primary flex-1">
@@ -107,6 +119,7 @@
                                 <tr class="bg-gray-100">
                                     <th class="border border-gray-300 p-2">Nome</th>
                                     <th class="border border-gray-300 p-2">Data</th>
+                                    <th class="border border-gray-300 p-2">Foto</th>
                                     <th class="border border-gray-300 p-2">Ações</th>
                                 </tr>
                             </thead>
@@ -130,13 +143,14 @@
         // Importar as funções necessárias do SDK do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
         // Configuração do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDGi1Lj-C4xpKsqRWrO0frhBFRnp94PUAo",
             authDomain: "crud-git-3a5da.firebaseapp.com",
             projectId: "crud-git-3a5da",
-            storageBucket: "crud-git-3a5da.firebasestorage.app",
+            storageBucket: "crud-git-3a5da.appspot.com",
             messagingSenderId: "1086071130934",
             appId: "1:1086071130934:web:7635ddb6dfa138a6798197",
             measurementId: "G-9MQNX0E37V"
@@ -145,13 +159,15 @@
         // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         // Função para adicionar um registro ao Firestore
-        async function addRecordToFirestore(name, date) {
+        async function addRecordToFirestore(name, date, photoURL) {
             try {
                 await addDoc(collection(db, "registros"), {
                     name: name,
-                    date: date
+                    date: date,
+                    photo: photoURL
                 });
                 showToast("Registro adicionado com sucesso!");
                 renderRecords(); // Atualize a lista de registros
@@ -159,6 +175,14 @@
                 console.error("Erro ao adicionar registro: ", error);
                 showToast("Erro ao adicionar registro.", "danger");
             }
+        }
+
+        // Função para fazer upload da foto e retornar a URL
+        async function uploadPhoto(file) {
+            const storageRef = ref(storage, `photos/${file.name}`);
+            await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            return downloadURL;
         }
 
         // Função para renderizar registros do Firestore
@@ -172,6 +196,9 @@
                     <tr class="hover:bg-gray-50 transition-colors fade-in">
                         <td class="border border-gray-300 p-2 font-medium">${record.name}</td>
                         <td class="border border-gray-300 p-2">${record.date}</td>
+                        <td class="border border-gray-300 p-2">
+                            <img src="${record.photo}" alt="Foto" class="w-16 h-16 object-cover rounded">
+                        </td>
                         <td class="border border-gray-300 p-2">
                             <div class="flex space-x-2">
                                 <button onclick="editRecord('${doc.id}')" class="btn btn-outline p-2">
@@ -199,15 +226,34 @@
         }
 
         // Configuração de listeners de eventos
-        document.getElementById('recordForm').addEventListener('submit', function(e) {
+        document.getElementById('recordForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const name = document.getElementById('name').value.trim();
             const date = document.getElementById('date').value;
-            if (name && date) {
-                addRecordToFirestore(name, date);
+            const photoInput = document.getElementById('photo');
+            const file = photoInput.files[0];
+
+            if (name && date && file) {
+                const photoURL = await uploadPhoto(file);
+                await addRecordToFirestore(name, date, photoURL);
                 document.getElementById('recordForm').reset();
+                document.getElementById('imagePreview').style.display = "none"; // Ocultar preview
             } else {
                 showToast("Por favor, preencha todos os campos.", "danger");
+            }
+        });
+
+        // Preview da imagem
+        document.getElementById('photo').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imagePreview = document.getElementById('imagePreview');
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = "block"; // Mostrar preview
+                };
+                reader.readAsDataURL(file);
             }
         });
 
