@@ -1,1 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Cadastro - CRUD Moderno</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #4F46E5;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #4338CA;
+        }
+        .btn-outline {
+            border: 1px solid #4F46E5;
+            color: #4F46E5;
+        }
+        .btn-outline:hover {
+            background-color: #4F46E5;
+            color: white;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4F46E5;
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
+        .image-preview {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto py-8">
+        <div id="toast" class="toast"></div>
 
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-bold mb-2 text-indigo-600">Sistema de Cadastro</h1>
+            <p class="text-gray-500">Gerencie facilmente registros com nossa interface moderna</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
+                <div class="card p-6">
+                    <h2 class="text-2xl font-semibold mb-6" id="form-title">Adicionar Registro</h2>
+                    <form id="recordForm">
+                        <input type="hidden" id="editId">
+                        
+                        <div class="form-group mb-4">
+                            <label for="name" class="block mb-2 font-medium">Nome</label>
+                            <input type="text" id="name" class="form-control border rounded w-full p-2" placeholder="Digite o nome" required>
+                        </div>
+                        
+                        <div class="form-group mb-4">
+                            <label for="date" class="block mb-2 font-medium">Data</label>
+                            <input type="date" id="date" class="form-control border rounded w-full p-2" required>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="photo" class="block mb-2 font-medium">Foto</label>
+                            <input type="file" id="photo" class="form-control border rounded w-full p-2" accept="image/*" required>
+                            <img id="imagePreview" class="image-preview" src="" alt="Preview da imagem" style="display: none;">
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button type="submit" id="submitBtn" class="btn btn-primary flex-1">
+                                <i class="fas fa-save mr-2"></i> Adicionar
+                            </button>
+                            <button type="button" id="resetBtn" class="btn btn-outline">
+                                <i class="fas fa-undo mr-2"></i> Limpar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-2">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-semibold">Lista de Cadastros</h2>
+                    </div>
+                    
+                    <div class="table-container overflow-x-auto">
+                        <table class="table w-full border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 p-2">Nome</th>
+                                    <th class="border border-gray-300 p-2">Data</th>
+                                    <th class="border border-gray-300 p-2">Foto</th>
+                                    <th class="border border-gray-300 p-2">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recordsList">
+                                <!-- Os registros serão inseridos aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="emptyState" class="text-center py-10">
+                        <i class="fas fa-folder-open text-gray-300 text-5xl mb-4"></i>
+                        <p class="text-gray-500">Nenhum registro cadastrado.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGi1Lj-C4xpKsqRWrO0frhBFRnp94PUAo",
+            authDomain: "crud-git-3a5da.firebaseapp.com",
+            projectId: "crud-git-3a5da",
+            storageBucket: "crud-git-3a5da.appspot.com",
+            messagingSenderId: "1086071130934",
+            appId: "1:1086071130934:web:7635ddb6dfa138a6798197",
+            measurementId: "G-9MQNX0E37V"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        async function addRecordToFirestore(name, date, photoURL) {
+            try {
+                await addDoc(collection(db, "registros"), {
+                    name: name,
+                    date: date,
+                    photo: photoURL
+                });
+                showToast("Registro adicionado com sucesso!");
+                renderRecords(); // Atualize a lista de registros
+            } catch (error) {
+                console.error("Erro ao adicionar registro: ", error);
+                showToast("Erro ao adicionar registro.", "danger");
+            }
+        }
+
+        async function uploadPhoto(file) {
+            const storageRef = ref(storage, `photos/${file.name}`);
+            await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            return downloadURL;
+        }
+
+        async function renderRecords() {
+            const querySnapshot = await getDocs(collection(db, "registros"));
+            const recordsList = document.getElementById('recordsList');
+            recordsList.innerHTML = ""; // Limpa a lista antes de renderizar
+            querySnapshot.forEach((doc) => {
+                const record = doc.data();
+                recordsList.innerHTML += `
+                    <tr class="hover:bg-gray-50 transition-colors fade-in">
+                        <td class="border border-gray-300 p-2 font-medium">${record.name}</td>
+                        <td class="border border-gray-300 p-2">${record.date}</td>
+                        <td class="border border-gray-300 p-2">
+                            <img src="${record.photo}" alt="Foto" class="w-16 h-16 object-cover rounded">
+                        </td>
+                        <td class="border border-gray-300 p-2">
+                            <div class="flex space-x-2">
+                                <button onclick="editRecord('${doc.id}')" class="btn btn-outline p-2">
+                                    <i class="fas fa-edit text-indigo-600"></i>
+                                </button>
+                                <button onclick="confirmDeleteRecord('${doc.id}')" class="btn btn-outline p-2">
+                                    <i class="fas fa-trash-alt text-red-500"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function showToast(message, type = "success") {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.style.display = "block";
+            toast.style.backgroundColor = type === "success" ? "#4F46E5" : "#E53E3E"; // Cor do fundo
+            setTimeout(() => {
+                toast.style.display = "none";
+            }, 3000);
+        }
+
+        document.getElementById('recordForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Impede o envio padrão do formulário
+            const name = document.getElementById('name').value.trim();
+            const date = document.getElementById('date').value;
+            const photoInput = document.getElementById('photo');
+            const file = photoInput.files[0];
+
+            if (name && date && file) {
+                try {
+                    const photoURL = await uploadPhoto(file); // Faz o upload da foto
+                    await addRecordToFirestore(name, date, photoURL); // Adiciona o registro ao Firestore
+                    document.getElementById('recordForm').reset(); // Reseta o formulário
+                    document.getElementById('imagePreview').style.display = "none"; // Oculta o preview
+                } catch (error) {
+                    console.error("Erro ao processar o registro: ", error);
+                    showToast("Erro ao processar o registro.", "danger");
+                }
+            } else {
+                showToast("Por favor, preencha todos os campos.", "danger");
+            }
+        });
+
+        document.getElementById('photo').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imagePreview = document.getElementById('imagePreview');
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = "block"; // Mostrar preview
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        renderRecords(); // Chama a função para renderizar os registros ao carregar a página
+    </script>
+</body>
+</html>
